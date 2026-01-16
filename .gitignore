@@ -1,0 +1,68 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache/
+
+# Logs
+*.log
+logs/
+
+# CrewAI outputs
+*.md
+!README.md
+images/
+output/
+reports/
+temp/
+
+# OS
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

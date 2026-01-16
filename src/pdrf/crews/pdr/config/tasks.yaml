@@ -1,0 +1,102 @@
+---
+extrair_ingredientes_da_receita:
+  description: Analise o texto da receita fornecido em {receita_texto} e extraia todos
+    os ingredientes com suas respectivas quantidades e unidades de medida. Organize
+    em uma lista clara e padronizada.
+  expected_output: 'Lista de ingredientes formatada com quantidade, unidade e nome
+    do ingrediente em cada linha (ex: ''2 xicaras de farinha de trigo'').'
+  agent: extrator_de_ingredientes
+
+extrair_titulo_da_receita:
+  description: Analise o texto da receita fornecido em {receita_texto} e extraia ou
+    crie um titulo claro, atrativo e descritivo para o prato. Se a receita ja tiver
+    um titulo, avalie se ele e adequado ou se pode ser melhorado.
+  expected_output: Titulo da receita em texto simples, sem formatacao adicional.
+  agent: extrator_de_titulo
+
+extrair_descricao_da_receita:
+  description: Analise o texto da receita fornecido em {receita_texto} e extraia ou
+    crie uma descricao breve e atrativa do prato, destacando suas principais caracteristicas,
+    sabores, textura e ocasioes adequadas para consumo.
+  expected_output: Descricao breve da receita em 2-3 frases, destacando os aspectos
+    mais atrativos do prato.
+  agent: extrator_de_descricao
+
+extrair_modo_de_preparo_da_receita:
+  description: Analise o texto da receita fornecido em {receita_texto} e extraia ou
+    organize o modo de preparo em passos numerados, claros e sequenciais. Certifique-se
+    de que as instrucoes sejam logicas e faceis de seguir.
+  expected_output: Lista numerada com o passo a passo do preparo da receita, com instrucoes
+    claras e objetivas.
+  agent: extrator_de_modo_de_preparo
+
+gerar_tags_da_receita:
+  description: 'Analise o texto da receita fornecido em {receita_texto} e gere tags
+    relevantes que categorizem o prato. Considere: tipo de cozinha (brasileira, italiana,
+    etc.), ocasiao (almoco, jantar, festa), dificuldade, tempo de preparo, restricoes
+    alimentares (vegano, sem gluten), e outras caracteristicas importantes.'
+  expected_output: Lista de tags separadas por virgulas, somente uma palavra por tag, relevantes para categorizar
+    e facilitar a busca da receita, entre 6 e 10 tags.
+  agent: gerador_de_tags
+
+converter_medidas_dos_ingredientes:
+  description: |-
+    Pegue a lista de ingredientes extraida e converta todas as medidas para unidades padrao e comuns:
+    - Xicaras para gramas (considerando densidade do ingrediente)
+    - Colheres de sopa para gramas ou ml
+    - Colheres de cha para gramas ou ml
+    - Xicaras para ml (para liquidos)
+    - Pacotes/latas para peso em gramas
+    - Unidades para gramas quando aplicavel
+
+    Mantenha a precisao.
+  expected_output: Lista de ingredientes com todas as medidas convertidas para unidades
+    padrao (gramas, ml, unidades).
+  agent: conversor_de_medidas_culinarias
+  context:
+    - extrair_ingredientes_da_receita
+
+# gerar_imagem_da_receita:
+#   description: |-
+#     Com base no titulo e descricao da receita extraidos, crie uma imagem atraente e realistica do prato final. A imagem deve:
+#     - Mostrar o prato pronto de forma apetitosa
+#     - Destacar os ingredientes principais visualmente
+#     - Ter estilo de fotografia culinaria profissional
+#     - Usar iluminacao natural e apresentacao elegante
+#
+#     Use o titulo e a descricao para guiar a criacao da imagem.
+#   expected_output: Uma imagem de alta qualidade representando o prato final da receita,
+#     com estilo fotografico profissional e apresentacao atraente.
+#   agent: gerador_de_imagem_culinaria
+#   context:
+#     - extrair_titulo_da_receita
+#     - extrair_descricao_da_receita
+
+compilar_receita_final:
+  description: |-
+    Organize todas as informacoes processadas em um documento markdown final bem estruturado com o seguinte formato:
+
+    # [Titulo da Receita]
+
+    ## Descricao
+    [Breve descricao do prato]
+
+    ## Ingredientes
+    - [Lista de ingredientes com medidas convertidas]
+
+    ## Modo de Preparo
+    1. [Passo a passo detalhado]
+
+    ## Tags
+    [Tags relevantes separadas por virgulas]
+
+    Certifique-se de que o markdown esteja bem formatado e facil de ler.
+  expected_output: Documento markdown completo e bem formatado contendo titulo,
+    descricao, ingredientes com medidas padronizadas, modo de preparo e tags.
+  agent: compilador_de_receitas
+  context:
+    - extrair_titulo_da_receita
+    - extrair_descricao_da_receita
+    - converter_medidas_dos_ingredientes
+    - extrair_modo_de_preparo_da_receita
+    - gerar_tags_da_receita
