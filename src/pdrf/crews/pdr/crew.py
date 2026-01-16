@@ -7,7 +7,7 @@ from crewai.project import CrewBase, agent, crew, task
 
 
 @CrewBase
-class ProcessadorDeReceitasCrewaiCrew:
+class PdrCrew:
     """ProcessadorDeReceitasCrewai crew"""
 
     @agent

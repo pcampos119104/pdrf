@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from pdr.crew import ProcessadorDeReceitasCrewaiCrew
+from pdr.crew import PdrCrew
 
 # This main file is intended to be a way for your to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
@@ -45,7 +45,7 @@ Preparação
     Coloque a massa do bolo de cenoura na assadeira e leve ao forno preaquecido a 200°C por 45 minutos ou até dourar.
     Agora você já sabe como fazer bolo de cenoura simples!'''
     }
-    ProcessadorDeReceitasCrewaiCrew().crew().kickoff(inputs=inputs)
+    PdrCrew().crew().kickoff(inputs=inputs)
 
 
 def train():
@@ -64,7 +64,7 @@ def train():
         'receita_texto': 'sample_value'
     }
     try:
-        ProcessadorDeReceitasCrewaiCrew().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
+        PdrCrew().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
 
     except Exception as e:
         raise Exception(f"An error occurred while training the crew: {e}")
@@ -74,7 +74,7 @@ def replay():
     Replay the crew execution from a specific task.
     """
     try:
-        ProcessadorDeReceitasCrewaiCrew().crew().replay(task_id=sys.argv[1])
+        PdrCrew().crew().replay(task_id=sys.argv[1])
 
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
@@ -95,7 +95,7 @@ def test():
         'receita_texto': 'sample_value'
     }
     try:
-        ProcessadorDeReceitasCrewaiCrew().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
+        PdrCrew().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
 
     except Exception as e:
         raise Exception(f"An error occurred while testing the crew: {e}")
