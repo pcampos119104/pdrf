@@ -56,21 +56,7 @@ converter_medidas_dos_ingredientes:
   context:
     - extrair_ingredientes_da_receita
 
-# gerar_imagem_da_receita:
-#   description: |-
-#     Com base no titulo e descricao da receita extraidos, crie uma imagem atraente e realistica do prato final. A imagem deve:
-#     - Mostrar o prato pronto de forma apetitosa
-#     - Destacar os ingredientes principais visualmente
-#     - Ter estilo de fotografia culinaria profissional
-#     - Usar iluminacao natural e apresentacao elegante
-#
-#     Use o titulo e a descricao para guiar a criacao da imagem.
-#   expected_output: Uma imagem de alta qualidade representando o prato final da receita,
-#     com estilo fotografico profissional e apresentacao atraente.
-#   agent: gerador_de_imagem_culinaria
-#   context:
-#     - extrair_titulo_da_receita
-#     - extrair_descricao_da_receita
+
 
 compilar_receita_final:
   description: |-
