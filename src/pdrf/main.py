@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 from random import randint
+from typing import Optional
 
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import uvicorn
 
 from crewai.flow import Flow, listen, start
 
@@ -9,69 +12,82 @@ from pdrf.crews.pdr.crew import PdrCrew
 
 
 class RecipeState(BaseModel):
-    recipe: str = ""
+    processed_recipe: str = ""
+    raw_recipe: str = ""
+
+
+class ProcessRecipeRequest(BaseModel):
+    raw_recipe: str
+
+
+class ProcessRecipeResponse(BaseModel):
+    success: bool
+    result: Optional[str] = None
+    error: Optional[str] = None
 
 
 class PdrFlow(Flow[RecipeState]):
-
     @start()
-    def process_unstructure_recipe(self, recipe: str = None):
+    def process_unstructure_recipe(self):
         """
         Run the crew.
         """
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        print(self.state)
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         inputs = {
-            'lista_ingredientes': 'sample_value',
-            'titulo_receita': 'sample_value',
-            'descricao_receita': 'sample_value',
-            'titulo': 'sample_value',
-            'descricao': 'sample_value',
-            'ingredientes_convertidos': 'sample_value',
-            'modo_preparo': 'sample_value',
-            'tags': 'sample_value',
-            'receita_texto': '''Bolo de Cenoura com Farinha de Aveia
-
-        15 Minutos Preparo
-
-            25 Porções
-
-        Lista de ingredientes
-
-            2 cenouras descascadas e cortadas em rodelas
-            ½ xícara (chá) de óleo
-            3 ovos
-            2 xícaras (chá) de açúcar
-            2 ½ xícaras (chá) de Farinha de Aveia Yoki
-            1 colher (sopa) de Fermento em Pó
-            ½ xícara (chá) de nozes picadas
-
-        Preparação
-
-            Bata no liquidificador a cenoura, o óleo e os ovos.
-            Retire a mistura do liquidificador e coloque em uma vasilha.
-            Acrescente o açúcar, a farinha de aveia, o fermento e as nozes picadas. Mexa delicadamente a receita de bolo de cenoura simples.
-            Unte e enfarinhe uma assadeira retangular média.
-            Coloque a massa do bolo de cenoura na assadeira e leve ao forno preaquecido a 200°C por 45 minutos ou até dourar.
-            Agora você já sabe como fazer bolo de cenoura simples!'''
+            "lista_ingredientes": "sample_value",
+            "titulo_receita": "sample_value",
+            "descricao_receita": "sample_value",
+            "titulo": "sample_value",
+            "descricao": "sample_value",
+            "ingredientes_convertidos": "sample_value",
+            "modo_preparo": "sample_value",
+            "tags": "sample_value",
+            "receita_texto": self.state.raw_recipe,
         }
-        PdrCrew().crew().kickoff(inputs=inputs)
+        result = PdrCrew().crew().kickoff(inputs=inputs)
+        self.state.processed_recipe = getattr(result, "raw", "") if result else ""
+        return result
 
-    # @listen(generate_sentence_count)
-    # def generate_poem(self):
-    #     print("Generating poem")
-    #     result = (
-    #         PoemCrew()
-    #         .crew()
-    #         .kickoff(inputs={"sentence_count": self.state.sentence_count})
-    #     )
-    #
-    #     print("Poem generated", result.raw)
-    #     self.state.poem = result.raw
-    #
-    # @listen(generate_poem)
-    # def save_poem(self):
-    #     print("Saving poem")
-    #     with open("poem.txt", "w") as f:
-    #         f.write(self.state.poem)
+
+
+# Create FastAPI app
+app = FastAPI(
+    title="PDRF Recipe Processor API",
+    description="API for processing unstructured recipes using CrewAI",
+    version="1.0.0",
+)
+
+
+@app.get("/")
+def root():
+    return {"message": "PDRF Recipe Processor API", "status": "running"}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
+
+@app.post("/recipes/process", response_model=ProcessRecipeResponse)
+def process_recipe(request: ProcessRecipeRequest):
+    """
+    Process an unstructured recipe text and return structured recipe information.
+    """
+    try:
+        pdrf = PdrFlow()
+        print('#################################################################')
+        print(request.raw_recipe)
+        print('#################################################################')
+        result = pdrf.kickoff(inputs={"raw_recipe": request.raw_recipe})
+
+        # Get the final result from the flow
+        recipe_result = getattr(result, "raw", "") if result else ""
+
+        return ProcessRecipeResponse(success=True, result=recipe_result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 def kickoff():
@@ -84,6 +100,13 @@ def plot():
     pdrf.plot()
 
 
+def run_api():
+    """
+    Run the FastAPI server.
+    """
+    uvicorn.run("pdrf.main:app", host="0.0.0.0", port=8000, reload=True)
+
+
 def run_with_trigger():
     """
     Run the flow with trigger payload.
@@ -93,7 +116,9 @@ def run_with_trigger():
 
     # Get trigger payload from command line argument
     if len(sys.argv) < 2:
-        raise Exception("No trigger payload provided. Please provide JSON payload as argument.")
+        raise Exception(
+            "No trigger payload provided. Please provide JSON payload as argument."
+        )
 
     try:
         trigger_payload = json.loads(sys.argv[1])

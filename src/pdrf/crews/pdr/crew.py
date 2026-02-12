@@ -9,6 +9,10 @@ from crewai.project import CrewBase, agent, crew, task
 @CrewBase
 class PdrCrew:
     """ProcessadorDeReceitasCrewai crew"""
+    llm=LLM(
+        model="ollama/llama3.1:8b",
+        temperature=0.2,
+    )
 
     @agent
     def conversor_de_medidas_culinarias(self) -> Agent:
@@ -22,29 +26,10 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
         )
 
-    # @agent
-    # def gerador_de_imagem_culinaria(self) -> Agent:
-    #     return Agent(
-    #         config=self.agents_config["gerador_de_imagem_culinaria"],
-    #         tools=[DallETool()],
-    #         reasoning=False,
-    #         max_reasoning_attempts=None,
-    #         inject_date=True,
-    #         allow_delegation=False,
-    #         max_iter=25,
-    #         max_rpm=None,
-    #         max_execution_time=None,
-    #         llm=LLM(
-    #             model="ollama/qwen2.5:14b",
-    #             temperature=0.7,
-    #         ),
-    #     )
+
 
     @agent
     def compilador_de_receitas(self) -> Agent:
@@ -58,10 +43,9 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
+    
+    
         )
 
     @agent
@@ -76,10 +60,9 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
+    
+    
         )
 
     @agent
@@ -94,10 +77,9 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
+    
+    
         )
 
     @agent
@@ -112,10 +94,9 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
+    
+    
         )
 
     @agent
@@ -130,10 +111,9 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
+    
+    
         )
 
     @agent
@@ -148,10 +128,9 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=LLM(
-                model="ollama/qwen2.5:14b",
-                temperature=0.7,
-            ),
+            llm=self.llm
+    
+    
         )
 
     @task
@@ -218,7 +197,8 @@ class PdrCrew:
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
-            chat_llm=LLM(model="ollama/qwen2.5:14b"),
+            chat_llm=self.llm
+    ,
         )
 
     def _load_response_format(self, name):
@@ -226,3 +206,21 @@ class PdrCrew:
             json_schema = json.loads(f.read())
 
         return SchemaConverter.build(json_schema)
+
+    # @agent
+    # def gerador_de_imagem_culinaria(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["gerador_de_imagem_culinaria"],
+    #         tools=[DallETool()],
+    #         reasoning=False,
+    #         max_reasoning_attempts=None,
+    #         inject_date=True,
+    #         allow_delegation=False,
+    #         max_iter=25,
+    #         max_rpm=None,
+    #         max_execution_time=None,
+    #         llm=self.llm(
+    #             model="ollama/qwen2.5:14b",
+    #             temperature=0.7,
+    #         ),
+    #     )

@@ -1,0 +1,10 @@
+### POST request to example server
+# curl -X POST "http://localhost:8000/process-recipe"
+#  -H "Content-Type: application/json"
+#  -d '{"receita_texto": "Your recipe text here..."}'
+POST http://localhost:8000/recipes/process
+Content-Type: application/json
+
+{
+  "raw_recipe": "O chef Rodrigo Oliveira ensina a receita original do dadinho de tapioca, principal atração do restaurante Mocotó. INGREDIENTES 300g de queijo de coalho 250g de tapioca granulada 8g de sal (a quantidade pode variar de acordo com o sal do queijo) 1 pitada de pimenta-branca 500ml de leite Preparo Forre uma assadeira de aproximadamente 20 x 30 centímetros com papel-filme e deixe à mão. Rale o queijo no ralador fino e misture com a tapioca, o sal e a pimenta-branca. É importante que estejam bem misturados para evitar a formação de grumos. Junte o leite fervente, mexendo sempre para que a tapioca hidrate uniformemente. Continue mexendo até a mistura se firmar. Despeje na assadeira forrada e cubra com o papel-filme ou saquinho plástico culinário para evitar que se forme uma película. Deixe esfriar em temperatura ambiente e leve à geladeira por pelo menos três horas. Corte em cubos e frite por imersão a 170ºC até dourar. É importante respeitar a temperatura de fritura para que os dadinhos fiquem crocantes e sequinhos. Para quem preferir, o forno também é opção.Para isso, unte uma assadeira com manteiga e asse os dadinhos a 200ºC, até ficarem dourados. Sirva com molho de pimenta agridoce ou uma geleia. Dica Os dadinhos podem ser guardados na geladeira por até três dias sem fritas. Caso não tenha uma fritadeira com termostado em casa, é só ir regulando a chama do fogão até os dadinhos saírem da maneira desejada. Rendimento 10 porções "
+}
