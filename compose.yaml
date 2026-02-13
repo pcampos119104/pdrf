@@ -20,5 +20,11 @@ services:
       - "8000:8000" # Fastapi
       - "2718:2718" # Marimo
 
+    networks:
+      - ollama-net
+
     # The bash file to execute, the one created above and added to Dockerfile
     command: bash /start.sh
+networks:
+  ollama-net:
+    external: true
