@@ -3,16 +3,14 @@ import os
 from crewai import LLM
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+
+
 # from crewai_tools import DallETool
 
 
 @CrewBase
 class PdrCrew:
     """ProcessadorDeReceitasCrewai crew"""
-    llm=LLM(
-        model="ollama/llama3.1:8b",
-        temperature=0.2,
-    )
 
     @agent
     def conversor_de_medidas_culinarias(self) -> Agent:
@@ -26,10 +24,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
         )
-
-
 
     @agent
     def compilador_de_receitas(self) -> Agent:
@@ -43,9 +38,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
-    
-    
+
         )
 
     @agent
@@ -60,9 +53,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
-    
-    
+
         )
 
     @agent
@@ -77,9 +68,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
-    
-    
+
         )
 
     @agent
@@ -94,9 +83,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
-    
-    
+
         )
 
     @agent
@@ -111,9 +98,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
-    
-    
+
         )
 
     @agent
@@ -128,9 +113,7 @@ class PdrCrew:
             max_iter=25,
             max_rpm=None,
             max_execution_time=None,
-            llm=self.llm
-    
-    
+
         )
 
     @task
@@ -197,8 +180,11 @@ class PdrCrew:
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
-            chat_llm=self.llm
-    ,
+            chat_llm=LLM(
+                model="ollama/llama3.1:8b",
+                temperature=0.2,
+            )
+
         )
 
     def _load_response_format(self, name):

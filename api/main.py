@@ -2,9 +2,8 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import uvicorn
 
-from core.pdrf.flow import PdrFlow
+from core.pdrf.pdr_flow import PdrFlow
 
 
 class ProcessRecipeRequest(BaseModel):
@@ -15,8 +14,6 @@ class ProcessRecipeResponse(BaseModel):
     success: bool
     result: Optional[str] = None
     error: Optional[str] = None
-
-
 
 
 # Create FastAPI app
@@ -44,9 +41,6 @@ def process_recipe(request: ProcessRecipeRequest):
     """
     try:
         pdrf = PdrFlow()
-        print('#################################################################')
-        print(request.raw_recipe)
-        print('#################################################################')
         result = pdrf.kickoff(inputs={"raw_recipe": request.raw_recipe})
 
         # Get the final result from the flow
@@ -60,48 +54,6 @@ def process_recipe(request: ProcessRecipeRequest):
 def kickoff():
     pdrf = PdrFlow()
     pdrf.kickoff()
-
-
-def plot():
-    pdrf = PdrFlow()
-    pdrf.plot()
-
-
-def run_api():
-    """
-    Run the FastAPI server.
-    """
-    uvicorn.run("pdrf.main:app", host="0.0.0.0", port=8000, reload=True)
-
-
-def run_with_trigger():
-    """
-    Run the flow with trigger payload.
-    """
-    import json
-    import sys
-
-    # Get trigger payload from command line argument
-    if len(sys.argv) < 2:
-        raise Exception(
-            "No trigger payload provided. Please provide JSON payload as argument."
-        )
-
-    try:
-        trigger_payload = json.loads(sys.argv[1])
-    except json.JSONDecodeError:
-        raise Exception("Invalid JSON payload provided as argument")
-
-    # Create flow and kickoff with trigger payload
-    # The @start() methods will automatically receive crewai_trigger_payload parameter
-    pdrf = PdrFlow()
-
-    try:
-        result = pdrf.kickoff({"crewai_trigger_payload": trigger_payload})
-        return result
-    except Exception as e:
-        raise Exception(f"An error occurred while running the flow with trigger: {e}")
-
 
 if __name__ == "__main__":
     kickoff()
