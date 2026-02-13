@@ -8,14 +8,9 @@ dependencies = [
     "crewai[litellm,tools]==1.7.2",
     "fastapi>=0.104.0",
     "uvicorn[standard]>=0.24.0",
+    "xonsh>=0.19.9",
 ]
 
-[project.scripts]
-kickoff = "pdrf.main:kickoff"
-run_crew = "pdrf.main:kickoff"
-plot = "pdrf.main:plot"
-run_with_trigger = "pdrf.main:run_with_trigger"
-api = "pdrf.main:run_api"
 
 [build-system]
 requires = ["hatchling"]
@@ -23,3 +18,12 @@ build-backend = "hatchling.build"
 
 [tool.crewai]
 type = "flow"
+
+[dependency-groups]
+dev = [
+    "marimo>=0.19.11",
+]
+
+[tool.uv]
+package = false
+

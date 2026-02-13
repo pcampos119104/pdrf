@@ -1,0 +1,24 @@
+services:
+# The service to be created on docker
+  app:
+    # how to build the image for this service
+    build:
+      # Where is the directory to work on...
+      context: .
+      # ... with what Dockerfile instructions
+      dockerfile: ./deployment/dev/dev.Dockerfile
+    image: pdrf_local
+    container_name: pdrf_local
+    # Make the code accessible for the container.
+    volumes:
+      - .:/app:z
+    # your .env based on .env.template
+    env_file:
+      - .env
+    # Open the port in localhost:8000 and 2718 for external access
+    ports:
+      - "8000:8000" # Fastapi
+      - "2718:2718" # Marimo
+
+    # The bash file to execute, the one created above and added to Dockerfile
+    command: bash /start.sh
