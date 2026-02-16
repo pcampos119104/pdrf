@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from pydantic import BaseModel
 
 from core.pdrf.pdr_flow import PdrFlow
@@ -52,13 +52,29 @@ def process_unstructured(request: ProcessRecipeRequest):
 
 
 @app.post("/recipes/process/pdf", response_model=ProcessRecipeResponse)
-def process_pdf(request: ProcessRecipeRequest):
-    pass
+async def process_pdf(file: UploadFile = File(...)):
+    try:
+        if file.content_type != "application/pdf":
+            raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+        
+        # Fake process: generate dummy Markdown
+        markdown = """# Sample Recipe
+            ## Ingredients
+            - 1 cup flour
+            - 2 eggs
+
+            ## Instructions
+            1. Mix ingredients.
+            2. Bake at 350°F for 30 minutes."""
+        return ProcessRecipeResponse(success=True, result=markdown)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 def kickoff():
     pdrf = PdrFlow()
     pdrf.kickoff()
+
 
 if __name__ == "__main__":
     kickoff()
