@@ -14,9 +14,6 @@ class PdrFlow(Flow[RecipeState]):
         """
         Run the crew.
         """
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-        print(self.state)
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         inputs = {
             "lista_ingredientes": "sample_value",
             "titulo_receita": "sample_value",

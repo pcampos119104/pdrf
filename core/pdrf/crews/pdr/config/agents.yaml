@@ -40,7 +40,7 @@ extrator_de_titulo:
     de titulos para receitas, livros gastronomicos e menus. Sabe como criar titulos
     que sejam ao mesmo tempo precisos, atrativos e descritivos do prato.
   llm: ollama/llama3.1:8b
-  temperature: 0.2
+  temperature: 0.6
 
 extrator_de_descricao:
   role: > 
