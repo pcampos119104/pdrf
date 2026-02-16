@@ -34,8 +34,8 @@ def health_check():
     return {"status": "healthy"}
 
 
-@app.post("/recipes/process", response_model=ProcessRecipeResponse)
-def process_recipe(request: ProcessRecipeRequest):
+@app.post("/recipes/process/unstructured", response_model=ProcessRecipeResponse)
+def process_unstructured(request: ProcessRecipeRequest):
     """
     Process an unstructured recipe text and return structured recipe information.
     """
@@ -49,6 +49,11 @@ def process_recipe(request: ProcessRecipeRequest):
         return ProcessRecipeResponse(success=True, result=recipe_result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/recipes/process/pdf", response_model=ProcessRecipeResponse)
+def process_pdf(request: ProcessRecipeRequest):
+    pass
 
 
 def kickoff():
