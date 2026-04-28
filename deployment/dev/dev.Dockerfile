@@ -5,16 +5,16 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Set environment variables for optimal uv behavior
 ENV UV_LINK_MODE=copy \
-    UV_PYTHON_DOWNLOADS=never \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    UV_COMPILE_BYTECODE=0
+  UV_PYTHON_DOWNLOADS=never \
+  PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1 \
+  UV_COMPILE_BYTECODE=0
 
 
 # Set working directory
 WORKDIR /app
 
-# update the alpine linux package index
+# update the system
 RUN apt-get update
 # for psutil, a dependencie of marimo.
 # RUN apt-get install -y --no-install-recommends npm gcc

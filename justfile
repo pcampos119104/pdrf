@@ -20,3 +20,7 @@ down:
 # Enter in the container shell
 shell:
     docker compose run --rm app bash
+
+# Open tmux development setup
+tmux:
+    tmuxp load tmuxp.yaml

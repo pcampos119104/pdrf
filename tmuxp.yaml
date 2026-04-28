@@ -1,0 +1,16 @@
+session_name: pdrf
+windows:
+  - window_name: editor
+    panes:
+      - nvim
+  - window_name: opencode
+    panes:
+      - shell_command: opencode
+  - window_name: lazydocker
+    layout: even-horizontal
+    panes:
+      - shell_command: lazydocker
+      - shell_command:
+  - window_name: lazygit
+    panes:
+      - shell_command: lazygit

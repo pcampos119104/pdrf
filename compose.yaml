@@ -1,5 +1,5 @@
 services:
-# The service to be created on docker
+  # The service to be created on docker
   app:
     # how to build the image for this service
     build:
@@ -18,7 +18,7 @@ services:
     # Open the port in localhost:8000 and 2718 for external access
     ports:
       - "8000:8000" # Fastapi
-      - "2718:2718" # Marimo
+      #- "2718:2718"  #Marimo
 
     networks:
       - ollama-net
@@ -28,3 +28,4 @@ services:
 networks:
   ollama-net:
     external: true
+

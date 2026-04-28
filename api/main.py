@@ -1,3 +1,5 @@
+import tempfile
+import os
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
@@ -56,17 +58,22 @@ async def process_pdf(file: UploadFile = File(...)):
     try:
         if file.content_type != "application/pdf":
             raise HTTPException(status_code=400, detail="Only PDF files are allowed")
-        
-        # Fake process: generate dummy Markdown
-        markdown = """# Sample Recipe
-            ## Ingredients
-            - 1 cup flour
-            - 2 eggs
 
-            ## Instructions
-            1. Mix ingredients.
-            2. Bake at 350°F for 30 minutes."""
-        return ProcessRecipeResponse(success=True, result=markdown)
+        # Save uploaded file temporarily
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+            content = await file.read()
+            temp_file.write(content)
+            temp_path = temp_file.name
+
+        try:
+            # Process PDF to Markdown using marker-pdf
+            from marker_pdf.convert import convert_single_pdf
+
+            markdown = convert_single_pdf(temp_path, use_llm=True)
+            return ProcessRecipeResponse(success=True, result=markdown)
+        finally:
+            # Clean up temporary file
+            os.unlink(temp_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
